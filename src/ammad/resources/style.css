@@ -1,0 +1,259 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap');
+*
+{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: 'Poppins' , sans-serif;
+    scroll-behavior: smooth;
+}
+body
+{
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image: url(../../images/landing-page.png);
+    overflow: hidden;
+    background: linear-gradient( #2b1055, #7597de);
+}
+#pop
+{
+    background-color: aliceblue;
+    width: 35%;
+    height: auto;
+}
+.container
+{
+    position: absolute;
+    
+    top: 50%;
+    left: 50%;
+    background: #fff;
+    width: 410px;
+    padding: 30px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.4);
+    transform: translate(-50%,-50%);
+}
+
+.container .text
+{
+    font-size: 35px;
+    font-weight: 600;
+    text-align: center;
+    color: #2b1055;
+}
+.container form
+{
+    margin-top: -20px;
+}
+.container form .data
+{
+    height: 45px;
+    width: 100%;
+    margin: 40px 0;
+}
+form .data label
+{
+    font-size: 19px
+}
+form .data input
+{
+    height: 100%;
+    width: 100%;
+    padding-left: 10px;
+    font-size: 17px;
+/*    border: 1.5px solid lightgrey;  */
+}
+form .btn
+{
+    margin: 30px 0;
+    height: 45px;
+    width: 100%;    
+}
+form .btn button
+{
+    height: 100%;
+    width: 100%;
+    border: 1px;
+    background-color: #2b1055;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all .4s;
+}
+form .btn button:hover
+{
+    background-color: #1c0522;
+  box-shadow: 0px 15px 20px rgba( 0, 0, 0, 0.4);
+  color: #fff;
+  transform: translateY(-7px);
+}
+/*-------------------------------------------------------------Left at 5:41------------------------------------------------------------------------*/
+#btn
+{
+    color: aliceblue;
+    width: 40%;
+    margin: auto;
+    padding: 38% 0% 0% 0%;
+}
+h1
+{
+    border: 3px solid #fff;
+    padding: 5px;
+    border-radius: 15px;
+    cursor: pointer;
+}
+#down
+{
+    float: left;
+}
+#pre
+{
+    float: right;
+}
+h1:hover
+{
+    color: #2b1055;
+    background-color: #fff;
+    transition: 1s;
+}
+form .signup-link
+{
+    text-align: center;
+}
+form .forgot-pass
+{
+    margin-top: -20px;
+}
+img
+{
+    height: 10px;
+    width: auto;
+    
+}
+.close-btn
+{
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 18px;
+}
+.close-btn:hover
+{
+    color: #3498db;
+}
+form a
+{
+    color: #3498db;
+    text-decoration: none;
+}
+form a:hover
+{
+    text-decoration: underline;
+}
+/*     */
+
+
+
+
+
+
+
+
+
+
+
+
+input {
+	outline: none;
+	border: none;
+}
+
+.wrap-input100 {
+  width: 100%;
+  position: relative;
+  border-bottom: 2px solid #d9d9d9;
+    
+}
+
+.input100 {
+  
+  font-size: 18px;
+  color: #2b1055;
+  line-height: 1.2;
+    font-weight: 500;
+  display: block;
+  width: 100%;
+  height: 52px;
+  background: transparent;
+  padding: 0 5px;
+}
+
+/*---------------------------------------------*/ 
+.focus-input100 {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.focus-input100::before {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+
+  background: #2b1055;
+}
+
+.focus-input100::after {
+  font-size: 18px;
+  color: #999999;
+  line-height: 1.2;
+
+  content: attr(data-placeholder);
+  display: block;
+  width: 100%;
+  position: absolute;
+  top: 15px;
+  left: 0px;
+  padding-left: 5px;
+
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
+
+.input100:focus + .focus-input100::after {
+  top: -20px;
+  font-size: 15px;
+}
+
+.input100:focus + .focus-input100::before {
+  width: 100%;
+}
+
+.has-val.input100 + .focus-input100::after {
+  top: -20px;
+  font-size: 15px;
+}
+
+.has-val.input100 + .focus-input100::before {
+  width: 100%;
+}
