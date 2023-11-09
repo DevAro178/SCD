@@ -377,3 +377,40 @@ input {
 .has-val.input100 + .focus-input100::before {
   width: 100%;
 }
+
+.navbar {
+  padding: 9px;
+  display: flex;
+  align-items: center;
+
+  margin:  auto;
+  border-bottom: 0.5px solid #f2f2f2;
+}
+.navbar h2 {
+  color: #d9d9d9;
+  
+  
+}
+.navbar .links  {
+  margin-left: auto;
+}
+.navbar a {
+  margin-left: 16px;
+  text-decoration: none;
+  padding: 6px;
+  color: #d9d9d9;
+}
+
+.navbar .menuicon{
+  width: 40px;
+  height: 40px;
+
+}
+.navbar .b1{
+  width: 60px;
+  border-radius: 60px;
+}
+.navbar .b2{
+  width: 70px;
+  border-radius: 60px;
+}

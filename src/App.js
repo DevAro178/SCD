@@ -3,9 +3,12 @@ import LoginPage from "./Login-page";
 import Register from "./Register";
 
 import Login from "./Login";
-import LoginPpage from "./ammad/LoginPpage";
-import SignupPage from "./ammad/SignupPage";
+import LoginPpage from "./Components/LoginPpage";
+import SignupPage from "./Components/SignupPage";
 import {BrowserRouter as Router , Route , Switch } from 'react-router-dom';
+import Navbar from "./Components/Navbar";
+import Sidebar from "./Components/Sidebar";
+
 
 
 function App() {
@@ -39,6 +42,14 @@ function App() {
           <Route path="/signup" >
             <SignupPage/>
           </Route>
+          <Route path="/nav" >
+            <Navbar/>
+          </Route>
+
+          {/* <Route path="/sidebar" >
+            <Sidebar/>
+          </Route> */}
+         
 
 
         </Switch>
