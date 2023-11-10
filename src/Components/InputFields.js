@@ -1,14 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import "../index.css";
 
-const InputFields = ({label,placeholder,type}) => {
+const InputFields = ({ placeholder, type }) => {
+  let [value, setValue] = useState("");
+  useEffect(() => {
+    console.log("yell");
+  }, [value]);
   return (
     <>
-      <div class="wrap-input100">
-		<input className="input100" placeholder={placeholder} type={type} name={placeholder} required />
-		<span class="focus-input100" data-placeholder={placeholder}></span>
-	</div><br></br>
+      <div className="wrap-input100">
+        <input
+          className={`input100 ${value && "has-val"}`}
+          type={type}
+          name={placeholder}
+          value={value}
+          onChange={(e) => {
+            setValue(e.target.value);
+          }}
+          autoComplete="off"
+          required
+        />
+        <span className="focus-input100" data-placeholder={placeholder}></span>
+      </div>
+      <br></br>
     </>
-  )
-}
+  );
+};
 
-export default InputFields
+export default InputFields;
