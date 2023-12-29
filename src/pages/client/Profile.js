@@ -6,7 +6,6 @@ const Profile = () => {
     <div>
   <main class="profile-page layout layout--3">
     <div class="container">
-      {/* <!-- Topics Start --> */}
       <div class="topics">
         
       </div>
@@ -102,7 +101,6 @@ const Profile = () => {
           </div>
           
         </div>
-      {/* <!-- Activities End --> */}
     </div>
   </main>
 
