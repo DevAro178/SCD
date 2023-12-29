@@ -23,7 +23,8 @@ const BusDetails = () => {
               <h2>Busses</h2>
               <p>7,439 Busses available</p>
             </div>
-            <a class="btn btn--main" href={}>
+            {/* <Link  href={`http://localhost:3000/booking/`+id}> */}
+              <Link to={`/booking/${id}`} className="btn btn--main">
               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
                 <title>add</title>
                 <path
@@ -31,7 +32,7 @@ const BusDetails = () => {
                 ></path>
               </svg>
               Make Booking
-            </a>
+            </Link>
           </div>
           <div class="roomListRoom">
             <div class="roomListRoom__header">
