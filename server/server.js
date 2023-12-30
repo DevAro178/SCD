@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json()); // for parsing application/json
 app.use(routes);
 
-const port = 3000;
+const port = 8000;
 
 // Create connection to MySQL
 const db = mysql.createConnection({

@@ -22,8 +22,9 @@ class AuthController {
   }
 
   static register(req, res) {
-    const { username, password } = req.body;
-    User.register(username, password, (userId) => {
+    const { username, password, email } = req.body;
+    const userType = 1; // default userType
+    User.register(username, password, userType, email, (userId) => {
       res.json({ userId });
     });
   }
