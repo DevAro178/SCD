@@ -5,8 +5,7 @@ from django.contrib import admin
 # from .models import Topic
 # from .models import Message
 # from .models import User
-from .models import Bus,Ticket,Booking
+from .models import Bus,Booking
 
 admin.site.register(Bus)
-admin.site.register(Ticket)
 admin.site.register(Booking)

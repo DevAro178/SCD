@@ -1,9 +1,10 @@
+from django.forms import ValidationError
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.contrib.auth.models import User
-from base.models import Bus,Ticket,Booking
+from base.models import Bus,Booking
 # from .serializers import RoomSerializer,RoomCreateSerializer,UserUpdateProfileSerializer,CreateUserProfileSerializer,TopicSerializer,RoomSerializerWithParticipants,MessageSerializer,UserProfileSerializer,CreateMessageSerializer
-from .serializers import BusSerializer,TicketSerializer,BookingSerializer,UserProfileSerializer,CreateUserProfileSerializer
+from .serializers import BusSerializer,BookingSerializer,UserProfileSerializer,CreateUserProfileSerializer,CreateBookingSerializer
 from rest_framework.exceptions import PermissionDenied
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -167,8 +168,50 @@ def DeleteBus(request, pk):
     return Response({'message': 'Bus deleted successfully'}, status=204)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])    
+def GetBookings(request):
     
+    bookings = Booking.objects.filter(user=request.user)
+    serializer = BookingSerializer(bookings, many=True)
+    return Response(serializer.data)
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])    
+def StoreBooking(request,pk):
+    data = request.data.copy()
+    data['user'] = request.user.id
+    data['bus_id']=pk
+    seat_numbers = data['seatNumber'].split(',')
+
+    # Check if any of the seat numbers are already booked
+    existing_bookings = Booking.objects.filter(bus_id=pk)
+    for booking in existing_bookings:
+        booked_seats = booking.seatNumber.split(',')
+        for seat_no in seat_numbers:
+            if seat_no in booked_seats:
+                return Response(f'Seat number {seat_no} is already booked for this bus', status=403)
+            
+
+    # If none of the seat numbers are booked, create the new booking
+    serializer = CreateBookingSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=200)
+    
+    return Response(serializer.errors, status=400)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def DeleteBooking(request, pk):
+    try:
+        booking = Booking.objects.get(id=pk)
+    except Booking.DoesNotExist:
+        return Response({'error': 'Booking not found'}, status=404)
+
+    booking.delete()
+    return Response({'message': 'Booking deleted successfully'}, status=204)
 
 
 

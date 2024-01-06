@@ -1,7 +1,7 @@
 # from base.models import Room,Topic,User,Message
 from django.contrib.auth.models import User
 from rest_framework.serializers import ModelSerializer,SerializerMethodField
-from base.models import Bus,Ticket,Booking
+from base.models import Bus,Booking
 from rest_framework import serializers
 
 
@@ -42,17 +42,20 @@ class BusSerializer(ModelSerializer):
     class Meta:
         model=Bus
         fields='__all__'
-        
-class BookingSerializer(ModelSerializer):
+
+class CreateBookingSerializer(serializers.ModelSerializer):
     class Meta:
-        model=Booking
-        fields='__all__'
-        
-class TicketSerializer(ModelSerializer):
+        model = Booking
+        fields = '__all__'
+
+
+class BookingSerializer(serializers.ModelSerializer):
+    bus_id = BusSerializer(read_only=True)
     class Meta:
-        model=Ticket
-        fields='__all__'
+        model = Booking
+        fields = '__all__'
         
+
         
         
 # class UserUpdateProfileSerializer(ModelSerializer):

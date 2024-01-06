@@ -21,6 +21,9 @@ urlpatterns = [
     path('bus/<int:pk>/edit', views.UpdateBus,name="UpdateBus"),
     path('bus/add', views.AddBus,name="AddBus"),
     path('bus/<int:pk>/delete', views.DeleteBus,name="DeleteBus"),
+    path('bookings/', views.GetBookings,name="GetBookings"),
+    path('booking/<int:pk>', views.StoreBooking,name="StoreBooking"),
+    path('booking/<int:pk>/delete', views.DeleteBooking,name="DeleteBooking"),
     
     # Rooms Routing
     # path('GetRooms/', views.GetRooms,name="GetRooms"),

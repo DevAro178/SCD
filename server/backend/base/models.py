@@ -23,13 +23,9 @@ class Bus(models.Model):
 class Booking(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     bus_id=models.ForeignKey(Bus,on_delete=models.CASCADE)
-    bookingDate=models.DateTimeField()
-    status=models.CharField(max_length=20)
+    seatNumber=models.CharField(max_length=50)
     
 
-class Ticket(models.Model):
-    booking_id=models.ForeignKey(Booking,on_delete=models.CASCADE)
-    seatNumber=models.IntegerField()
 
 
 # # Old 

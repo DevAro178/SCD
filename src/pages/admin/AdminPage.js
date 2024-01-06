@@ -73,7 +73,7 @@ const AdminPage = () => {
         <div class="roomList__header">
           <div>
             <h2>Busses</h2>
-            <p>7,439 Busses available</p>
+            <p>{data && data.length} Busses available</p>
           </div>
           {/* <Link  href={`http://localhost:3000/booking/`+id}> */}
             <Link to={`/bus/add`} className="btn btn--main">

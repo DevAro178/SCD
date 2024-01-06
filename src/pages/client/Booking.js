@@ -1,9 +1,48 @@
-import React from "react";
+import React,{useState} from "react";
 import { Link,useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 // import avatar from "../assets/avatar.svg";
 
 const Booking = () => {
   let {id}= useParams();
+  const navigate = useNavigate();
+  let {access} = useSelector((state) => state.user);
+  const [form, setForm] = useState({
+    seatNumber: '',
+  });
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", "Bearer " + access);
+  var formdata = new FormData();
+  formdata.append("seatNumber", form.seatNumber);
+
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow'
+    };
+
+    fetch(`http://127.0.0.1:8000/booking/${id}`, requestOptions)
+    .then(response => {
+      if (response.ok) 
+        navigate('/');
+      else 
+      alert("Seat already booked");
+    })
+    .catch(error => console.log('error', error));
+  };
+  
   return (
 <main class="create-room layout">
       <div class="container">
@@ -21,18 +60,13 @@ const Booking = () => {
           </div>
           <div class="layout__body">
             <h2 class="auth__tagline">Book your Bus Tickets With Ease.</h2>
-            <form class="form" action="#">
+            <form class="form" onSubmit={handleSubmit}>
               <div class="form__group form__group">
-                <label for="fullname">Booking Date</label>
-                <input id="fullname" name="fullname" type="date" placeholder="e.g. Dennis Ivy" />
-              </div>
-              <div class="form__group form__group">
-                <label for="room_name">Seat No.</label>
-                <input id="username" name="username" type="text" placeholder="1, 3, 5" />
+                <label for="seatNumber">Seat No.</label>
+                <input id="seatNumber" name="seatNumber" type="text" placeholder="1, 3, 5" onChange={handleChange} />
               </div>
               
               <button class="btn btn--main" type="submit">
-                
                 Book Ticket
               </button>
             </form>

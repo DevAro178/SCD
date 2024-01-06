@@ -6,7 +6,7 @@ import { Link, useParams } from "react-router-dom";
 
 const BusDetails = () => {
   let {id}=useParams();
-  const { access } = useSelector((state) => state.user);
+  const { access,superuser } = useSelector((state) => state.user);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -44,16 +44,29 @@ const BusDetails = () => {
             <h2>Busses</h2>
             <p>7,439 Busses available</p>
           </div>
-          {/* <Link  href={`http://localhost:3000/booking/`+id}> */}
-            <Link to={`/bus/add`} className="btn btn--main">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-              <title>add</title>
-              <path
-                d="M16.943 0.943h-1.885v14.115h-14.115v1.885h14.115v14.115h1.885v-14.115h14.115v-1.885h-14.115v-14.115z"
-              ></path>
-            </svg>
-            Add New Bus
-          </Link>
+          {
+            superuser ? (
+              <Link to={`/bus/add`} className="btn btn--main">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                  <title>add</title>
+                  <path
+                    d="M16.943 0.943h-1.885v14.115h-14.115v1.885h14.115v14.115h1.885v-14.115h14.115v-1.885h-14.115v-14.115z"
+                  ></path>
+                </svg>
+                Add New Bus
+              </Link>
+            ) : (
+              <Link to={`/booking/${id}`} className="btn btn--main">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                  <title>add</title>
+                  <path
+                    d="M16.943 0.943h-1.885v14.115h-14.115v1.885h14.115v14.115h1.885v-14.115h14.115v-1.885h-14.115v-14.115z"
+                  ></path>
+                </svg>
+                Make Booking
+              </Link>
+            )
+          }
         </div>
 
           {data && (
@@ -72,7 +85,9 @@ const BusDetails = () => {
                 <span>@{data.busNumber}</span>
               </Link>
               <div class="roomListRoom__actions">
-                <Link to={`/bus/edit/${data.id}`}><span><i class="fa-solid fa-pen-to-square"></i> Edit</span></Link>
+                {superuser && (
+                  <Link to={`/bus/edit/${data.id}`}><span><i class="fa-solid fa-pen-to-square"></i> Edit</span></Link>
+                )}
               </div>
             </div>
             <div class="roomListRoom__content">
