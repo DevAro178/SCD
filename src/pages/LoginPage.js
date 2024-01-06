@@ -1,9 +1,42 @@
-import React from "react";
+import React,{useState} from "react";
 import logo from "../assets/logo.svg";
 import { Link } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { setUser } from "../redux/user";
 // import avatar from "../assets/avatar.svg";
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
+  const [form, setForm] = useState({ username: '', password: '' });
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await fetch('http://127.0.0.1:8000/token/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: form.username,
+        password: form.password
+      })
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      dispatch(setUser(data));
+    } else {
+      console.error('Failed to login');
+      console.error(response);
+    }
+  };
   return (
     <div>
       
@@ -18,10 +51,10 @@ const LoginPage = () => {
           <div class="layout__body">
             <h2 class="auth__tagline">Book your Bus Tickets With Ease.</h2>
 
-            <form class="form" action="#">
+            <form class="form" onSubmit={handleSubmit}>
               <div class="form__group form__group">
                 <label for="room_name">Username</label>
-                <input id="username" name="username" type="text" placeholder="e.g. dennis_ivy" />
+                <input id="username" name="username" type="text" placeholder="e.g. dennis_ivy"  onChange={handleChange} />
               </div>
               <div class="form__group">
                 <label for="password">Password</label>
@@ -30,6 +63,7 @@ const LoginPage = () => {
                   name="password"
                   type="password"
                   placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                  onChange={handleChange}
                 />
               </div>
 

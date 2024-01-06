@@ -1,9 +1,47 @@
-import React from "react";
+import React,{useState} from "react";
+import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import { Link } from "react-router-dom";
+import { useDispatch } from 'react-redux';
 // import avatar from "../assets/avatar.svg";
 
 const SignupPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [form, setForm] = useState({ username: '', password: '',confirm_password:'',email:'' });
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+  
+    if (form.password !== form.confirm_password) {
+      alert('Passwords do not match');
+      return;
+    }
+  
+    const response = await fetch('http://127.0.0.1:8000/CreateUserProfilea', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username: form.username, email: form.email, password: form.password }),
+    });
+  
+    if (response.ok) {
+      alert('User created successfully');
+      navigate('/login'); // redirect to the login page
+    } else {
+      console.log('Failed to create user');
+    }
+  };
+
+
   return (
 <main class="auth layout">
       <div class="container">
@@ -16,14 +54,14 @@ const SignupPage = () => {
           <div class="layout__body">
             <h2 class="auth__tagline">Book your Bus Tickets With Ease.</h2>
 
-            <form class="form" action="#">
-              <div class="form__group form__group">
-                <label for="fullname">Full Name</label>
-                <input id="fullname" name="fullname" type="text" placeholder="e.g. Dennis Ivy" />
-              </div>
+            <form class="form" onSubmit={handleSubmit}>
               <div class="form__group form__group">
                 <label for="room_name">Username</label>
-                <input id="username" name="username" type="text" placeholder="e.g. dennis_ivy" />
+                <input id="username" name="username" type="text" placeholder="e.g. dennis_ivy" onChange={handleChange} />
+              </div>
+              <div class="form__group form__group">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="text" placeholder="denis@gmail.com" onChange={handleChange} />
               </div>
               <div class="form__group">
                 <label for="password">Password</label>
@@ -31,7 +69,7 @@ const SignupPage = () => {
                   id="password"
                   name="password"
                   type="password"
-                  placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                  placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" onChange={handleChange}
                 />
               </div>
 
@@ -41,7 +79,7 @@ const SignupPage = () => {
                   id="confirm_password"
                   name="confirm_password"
                   type="password"
-                  placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                  placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" onChange={handleChange}
                 />
               </div>
 

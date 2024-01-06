@@ -1,8 +1,9 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.contrib.auth.models import User
+from base.models import Bus,Ticket,Booking
 # from .serializers import RoomSerializer,RoomCreateSerializer,UserUpdateProfileSerializer,CreateUserProfileSerializer,TopicSerializer,RoomSerializerWithParticipants,MessageSerializer,UserProfileSerializer,CreateMessageSerializer
-from .serializers import BusSerializer,TicketSerializer,BookingSerializer,UserProfileSerializer
+from .serializers import BusSerializer,TicketSerializer,BookingSerializer,UserProfileSerializer,CreateUserProfileSerializer
 from rest_framework.exceptions import PermissionDenied
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -30,6 +31,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
             data["user_id"] = user.id
             data["username"] = user.username
             data["email"] = user.email
+            data["superuser"]=user.is_superuser
             # ... add other user information as needed
     
             return data
@@ -48,69 +50,10 @@ def home(request):
         'GET /GetUserProfile/int:pk',
         'GET /UpdateUserProfile/int:pk',
         'POST /CreateUserProfilea',
-        # 'GET /GetRooms',
-        # 'GET /GetRoomsByUserID/int:pk',
-        # 'GET /GetRoomsByTopicID/int:pk',        
-        # 'GET /GetRoomsByTitleName/str:pk',
-        # 'GET /GetRoom/int:pk',
-        # 'GET /CreateRoom',
-        # 'GET /UpdateRoom/int:pk',
-        # 'GET /DeleteRoom/int:pk',
-        # 'GET /GetTopics',
-        # 'GET /GetTopic/int:pk',
-        # 'GET /SearchTopics/str:pk',
-        # 'GET /CreateTopic',
-        # 'GET /UpdateTopic/int:pk',
-        # 'GET /GetMessages',
-        # 'GET /GetMessageByID/int:pk',        
-        # 'GET /GetMessages/str:pk',
-        # 'GET /GetMessagesByRoomID/int:pk',
-        # 'GET /GetMessagesByUserID/int:pk',
-        # 'GET /GetMessagesByTopicID/int:pk',        
-        # 'GET /CreateMessage',
-        # 'GET /DeleteMessage/int:pk',
-        
-        
     ]
     return Response(routes)
 
 
-# User Modal EndPoints
-@api_view(['GET'])
-def GetUserProfile(request,pk):
-    user = User.objects.get(id=pk)
-    serializer = UserProfileSerializer(user, many=False)
-    return Response(serializer.data)
-
-
-@api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-def CreateUserProfile(request):
-    print(request.data)
-    serializer = UserProfileSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=200)
-
-    return Response(serializer.errors, status=400)
-
-
-@api_view(['PUT'])
-@permission_classes([IsAuthenticated])
-def UpdateUserProfile(request,pk):
-    user = User.objects.get(id=pk)
-    if user != request.user:
-        raise PermissionDenied("You can't edit this profile.")
-    else:
-        serializer = UserProfileSerializer(instance=user, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=200)
-
-    return Response(serializer.errors, status=400)
-
-
-    
 @api_view(['GET'])
 def TokenAuth(request):
     token = request.headers.get('Authorization', None)
@@ -126,6 +69,106 @@ def TokenAuth(request):
     else:
         print("No valid token found in the header")
         return Response({"error": "No valid token found in the header."}, status=401)
+
+
+# User Modal EndPoints
+@api_view(['GET'])
+def GetUserProfile(request,pk):
+    user = User.objects.get(id=pk)
+    serializer = UserProfileSerializer(user, many=False)
+    return Response(serializer.data)
+
+
+# @api_view(['POST'])
+# # @permission_classes([IsAuthenticated])
+# def CreateUserProfile(request):
+#     print(request.data)
+#     serializer = CreateUserProfileSerializer(data=request.data)
+#     if serializer.is_valid():
+#         serializer.save()
+#         return Response(serializer.data, status=200)
+
+#     return Response(serializer.errors, status=400)
+@api_view(['POST'])
+def CreateUserProfile(request):
+    serializer = CreateUserProfileSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=200)
+
+    return Response(serializer.errors, status=400)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def UpdateUserProfile(request,pk):
+    user = User.objects.get(id=pk)
+    if user != request.user:
+        raise PermissionDenied("You can't edit this profile.")
+    else:
+        serializer = UserProfileSerializer(instance=user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=200)
+
+    return Response(serializer.errors, status=400)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def GetBus(request):
+    bus = Bus.objects.all()
+    serializer = BusSerializer(bus, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def GetBusSingle(request,pk):
+    bus = get_object_or_404(Bus, id=pk)
+    serializer = BusSerializer(bus, many=False)
+    return Response(serializer.data)
+
+
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def AddBus(request):
+    serializer = BusSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=200)
+
+    return Response(serializer.errors, status=400)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def UpdateBus(request, pk):
+    try:
+        bus = Bus.objects.get(id=pk)
+    except Bus.DoesNotExist:
+        return Response({'error': 'Bus not found'}, status=404)
+
+    serializer = BusSerializer(bus, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=200)
+
+    return Response(serializer.errors, status=400)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def DeleteBus(request, pk):
+    try:
+        bus = Bus.objects.get(id=pk)
+    except Bus.DoesNotExist:
+        return Response({'error': 'Bus not found'}, status=404)
+
+    bus.delete()
+    return Response({'message': 'Bus deleted successfully'}, status=204)
+
+
+    
+
 
 
 

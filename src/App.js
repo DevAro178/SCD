@@ -1,8 +1,12 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { useEffect } from 'react';
+import { useDispatch,useSelector } from 'react-redux';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import Protected from './components/Protected';
+import IsAdmin from './components/IsAdmin';
+import IsLoggedOut from './components/IsLoggedOut';
 import AdminPage from './pages/admin/AdminPage';
 import { useState } from 'react';
 import Header from './components/Header';
@@ -13,27 +17,87 @@ import BusAdd from './pages/admin/BusAdd';
 import BusEdit from './pages/admin/BusEdit';
 import EditProfile from './pages/client/EditProfile';
 import Profile from './pages/client/Profile';
-
-
-
+import { setAccess, setRefresh } from './redux/user';
 
 function App() {
-  const [isLoggedIn, setisLoggedIn] = useState(true);
+  
+  const [isLoggedIn, setisLoggedIn] = useState(false);
+  const [isAdmin, setisAdmin] = useState(false);
+  const { access, superuser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+useEffect(() => {
+  setisLoggedIn(!!access);
+  setisAdmin(!!access && superuser);
+}, [access, superuser]);
+  useEffect(() => {
+    if(access){
+      const interval = setInterval(async () => {
+        // Replace with your actual API call
+        const response = await fetch('/api/refresh-token');
+        const data = await response.json();
+        dispatch(setRefresh(data.refresh));
+        dispatch(setAccess(data.access));
+        console.log(data);
+      }, 2700000); // 2700000 ms = 45 minutes
+      
+      // Clear interval on component unmount
+      return () => clearInterval(interval);
+    }
+  }, [dispatch]);
+  
   return (
     <div className="App">
       <Router>
         <Header />
             <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignupPage />} />
+              
+              <Route path="/login" element={
+                  <IsLoggedOut isLoggedIn={!isLoggedIn}>
+                    <LoginPage />
+                  </IsLoggedOut>
+                } />
+              <Route path="/signup" element={
+                  <IsLoggedOut isLoggedIn={!isLoggedIn}>
+                    <SignupPage />
+                  </IsLoggedOut>
+                } />
               <Route path="/bus/:id" element={<BusDetails />} />
-              <Route path="/booking/:id" element={<Booking />} />
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/profile/edit" element={<EditProfile />} />
-              <Route path="/admin" element={<AdminPage />} />
-              <Route path="/bus/add" element={<BusAdd />} />
-              <Route path="/bus/edit" element={<BusEdit />} />
+              <Route path="/booking/:id" element={
+                  <Protected isLoggedIn={isLoggedIn} isAdmin={isAdmin}>
+                    <Booking />
+                  </Protected>
+                } />
+              <Route path="/" element={
+                  <Protected isLoggedIn={isLoggedIn} isAdmin={isAdmin}>
+                    <Dashboard />
+                  </Protected>
+                } />
+              <Route path="/profile" element={
+                  <Protected isLoggedIn={isLoggedIn} isAdmin={isAdmin}>
+                    <Profile />
+                  </Protected>
+                } />
+              <Route path="/profile/edit"element={
+                  <Protected isLoggedIn={isLoggedIn} isAdmin={isAdmin}>
+                    <EditProfile />
+                  </Protected>
+                } />
+                <Route path="/admin" element={
+                    <IsAdmin isAdmin={isAdmin}>
+                      <AdminPage />
+                    </IsAdmin>
+                  } />
+                <Route path="/bus/add" element={
+                    <IsAdmin isAdmin={isAdmin}>
+                      <BusAdd />
+                    </IsAdmin>
+                  } />
+                <Route path="/bus/edit/:id" element={
+                    <IsAdmin isAdmin={isAdmin}>
+                      <BusEdit />
+                    </IsAdmin>
+                  } />
+              
             </Routes>
         </Router>
     </div>
@@ -46,7 +110,7 @@ export default App;
 {/* <Route path='/admin'
                 element={
                   <Protected isLoggedIn={isLoggedIn}>
-                    <AdminPage />
+                    < />
                   </Protected>
                 }
               /> */}

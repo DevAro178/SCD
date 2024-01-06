@@ -1,8 +1,69 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { Link,useNavigate } from "react-router-dom";
 // import avatar from "../assets/avatar.svg";
 
 const BusAdd = () => {
+  const navigate = useNavigate();
+  let {access}=useSelector((state)=>state.user);
+  const [form, setForm] = useState({
+    busNumber: '',
+    departureCity: '',
+    arrivalCity: '',
+    departureTime: '',
+    arrivalTime: '',
+    avaialableSeats: '',
+  });
+
+  
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", "Bearer " + access);
+
+  var formdata = new FormData();
+  for (let key in form) {
+    if (key === 'departureTime' || key === 'arrivalTime') {
+      // Convert the date-time to the desired format
+      let date = new Date(form[key]);
+      formdata.append(key, date.toISOString());
+    } else {
+      formdata.append(key, form[key]);
+    }
+  }
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow'
+    };
+
+    fetch("http://127.0.0.1:8000/bus/add", requestOptions)
+      .then(response => {
+        if (response.ok) {
+          return response.text();
+        } else {
+          throw new Error('Failed to add bus');
+        }
+      })
+      .then(result => {
+        console.log(result);
+        navigate('/admin');
+      })
+      .catch(error => {
+        console.error('error', error);
+        alert(error.message);
+      });
+  };
   return (
     <main class="create-room layout">
       <div class="container">
@@ -20,26 +81,30 @@ const BusAdd = () => {
           </div>
           <div class="layout__body">
             <h2 class="auth__tagline">Book your Bus Tickets With Ease.</h2>
-            <form class="form" action="#">
+            <form class="form" onSubmit={handleSubmit}>
               <div class="form__group form__group">
-                <label for="fullname">Bus Number</label>
-                <input id="bus_number" name="bus_number" type="text" placeholder="" />
+                <label for="busNumber">Bus Number</label>
+                <input id="busNumber" name="busNumber" type="text" placeholder="" onChange={handleChange} />
               </div>
               <div class="form__group form__group">
-                <label for="room_name">Departure City</label>
-                <input id="dep_city" name="dep_city" type="text" placeholder="" />
+                <label for="departureCity">Departure City</label>
+                <input id="departureCity" name="departureCity" type="text" placeholder="" onChange={handleChange} />
               </div>
               <div class="form__group form__group">
-                <label for="room_name">Arrival City</label>
-                <input id="ar_city" name="ar_city" type="text" placeholder="" />
+                <label for="arrivalCity">Arrival City</label>
+                <input id="arrivalCity" name="arrivalCity" type="text" placeholder="" onChange={handleChange} />
               </div>
               <div class="form__group form__group">
-                <label for="room_name">Departure Time</label>
-                <input id="dep_time" name="dep_time" type="text" placeholder="" />
+                <label for="departureTime">Departure Time</label>
+                <input id="departureTime" name="departureTime" type="datetime-local" placeholder="" onChange={handleChange} />
               </div>
               <div class="form__group form__group">
-                <label for="room_name">Arrival Time</label>
-                <input id="ar_time" name="ar_time" type="text" placeholder="" />
+                <label for="arrivalTime">Arrival Time</label>
+                <input id="arrivalTime" name="arrivalTime" type="datetime-local" placeholder="" onChange={handleChange} />
+              </div>
+              <div class="form__group form__group">
+                <label for="avaialableSeats">Available Seats</label>
+                <input id="avaialableSeats" name="avaialableSeats" type="text" placeholder="" onChange={handleChange} />
               </div>
               
               <button class="btn btn--main" type="submit">Add Bus</button>

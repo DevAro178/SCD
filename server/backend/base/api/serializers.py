@@ -11,6 +11,33 @@ class UserProfileSerializer(ModelSerializer):
         model=User
         fields='__all__'
         
+class CreateUserProfileSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+    class Meta:
+        model = User
+        fields='__all__'
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
+
+class CreateUserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'email']
+
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = User.objects.create_user(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
+    
+    
+    
+        
 class BusSerializer(ModelSerializer):
     class Meta:
         model=Bus
@@ -39,17 +66,7 @@ class TicketSerializer(ModelSerializer):
 #         return value
         
         
-# class CreateUserProfileSerializer(serializers.ModelSerializer):
-#     password = serializers.CharField(write_only=True)
-#     class Meta:
-#         model = User
-#         fields='__all__'
-#     def create(self, validated_data):
-#         password = validated_data.pop('password')
-#         user = User(**validated_data)
-#         user.set_password(password)
-#         user.save()
-#         return user
+
 
 
 # class RoomUserSerializer(ModelSerializer):

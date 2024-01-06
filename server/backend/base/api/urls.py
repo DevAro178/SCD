@@ -15,6 +15,12 @@ urlpatterns = [
     path('GetUserProfile/<str:pk>', views.GetUserProfile,name="GetUserProfile"),
     path('UpdateUserProfile/<int:pk>', views.UpdateUserProfile,name="UpdateUserProfile"),
     path('CreateUserProfilea', views.CreateUserProfile,name="CreateUserProfile"),
+    # Bus Routes
+    path('bus/', views.GetBus,name="GetBus"),
+    path('bus/<int:pk>', views.GetBusSingle,name="GetBusSingle"),
+    path('bus/<int:pk>/edit', views.UpdateBus,name="UpdateBus"),
+    path('bus/add', views.AddBus,name="AddBus"),
+    path('bus/<int:pk>/delete', views.DeleteBus,name="DeleteBus"),
     
     # Rooms Routing
     # path('GetRooms/', views.GetRooms,name="GetRooms"),
