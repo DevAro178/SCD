@@ -33,8 +33,7 @@ const LoginPage = () => {
       const data = await response.json();
       dispatch(setUser(data));
     } else {
-      console.error('Failed to login');
-      console.error(response);
+      alert("Invalid Username or Password")
     }
   };
   return (

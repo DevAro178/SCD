@@ -213,6 +213,12 @@ def DeleteBooking(request, pk):
     booking.delete()
     return Response({'message': 'Booking deleted successfully'}, status=204)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def unitTesting(request):
+    return Response("Unit Testing", status=200)
+
+
 
 
 # # CRUD FOR ROOMS CLASS

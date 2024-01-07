@@ -8,6 +8,7 @@ import Protected from './components/Protected';
 import IsAdmin from './components/IsAdmin';
 import IsLoggedOut from './components/IsLoggedOut';
 import AdminPage from './pages/admin/AdminPage';
+import FAQ from './pages/FAQ';
 import { useState } from 'react';
 import Header from './components/Header';
 import BusDetails from './pages/BusDetails';
@@ -66,6 +67,10 @@ useEffect(() => {
                   <Protected isLoggedIn={isLoggedIn} isAdmin={isAdmin}>
                     <Booking />
                   </Protected>
+                } />
+              {/* Route for FAQ page */}
+              <Route path="/faq" element={
+                    <FAQ />
                 } />
               <Route path="/" element={
                   <Protected isLoggedIn={isLoggedIn} isAdmin={isAdmin}>

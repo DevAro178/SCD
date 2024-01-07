@@ -63,7 +63,7 @@ const Booking = () => {
             <form class="form" onSubmit={handleSubmit}>
               <div class="form__group form__group">
                 <label for="seatNumber">Seat No.</label>
-                <input id="seatNumber" name="seatNumber" type="text" placeholder="1, 3, 5" onChange={handleChange} />
+                <input id="seatNumber" name="seatNumber" type="text" placeholder="1, 3, 5" onChange={handleChange} pattern="[0-9]*" />
               </div>
               
               <button class="btn btn--main" type="submit">
