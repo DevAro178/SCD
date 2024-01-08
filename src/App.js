@@ -19,6 +19,7 @@ import BusEdit from './pages/admin/BusEdit';
 import EditProfile from './pages/client/EditProfile';
 import Profile from './pages/client/Profile';
 import { setAccess, setRefresh } from './redux/user';
+import LoginUnitTest from './pages/LoginUnitTest';
 
 function App() {
   
@@ -102,6 +103,9 @@ useEffect(() => {
                       <BusEdit />
                     </IsAdmin>
                   } />
+                <Route path="/login/unitTest" element={
+                  <LoginUnitTest />
+                } />
               
             </Routes>
         </Router>
